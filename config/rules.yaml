@@ -12,7 +12,7 @@ rules:
       type: "cents_check"
       target_field: "total"
       condition: "matches"
-      input_value: 1.00  # Check if cent value is 00
+      input_value: 1.00  # matches only the cent value
     points_calculation:
       extra_points: 50
 
