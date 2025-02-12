@@ -1,0 +1,56 @@
+services:
+  rest-server:
+    container_name: rest-server
+    build:
+      context: .
+      dockerfile: ./deployment/rest_server/Dockerfile
+    image: rest-server:latest
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+
+    environment:
+      - REDIS_URL=redis://redis-server:6379
+    volumes:
+      - ./logs:/src/logs
+    networks:
+      - app_network
+    depends_on:
+      - redis-server
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+
+  redis-server:
+    container_name: redis-server
+    image: redis:alpine
+    command: redis-server
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+networks:
+  app_network:
+    name: app_network
+    driver: bridge

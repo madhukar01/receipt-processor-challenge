@@ -1,0 +1,79 @@
+[tool.poetry]
+name = "receipt_processor"
+version = "0.1.0"
+description = "Receipt processor"
+authors = ["madhukar01 <mholla8@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.6"
+uvicorn = "^0.34.0"
+pydantic = "^2.10.5"
+structlog = "^24.4.0"
+pottery = "^3.0.0"
+gunicorn = "^23.0.0"
+
+
+[tool.poetry.group.dev.dependencies]
+isort = "^5.13.2"
+pylint = "^3.3.2"
+pre-commit = "^4.0.1"
+black = "^24.10.0"
+types-redis = "^4.6.0.20241004"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 79
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | \.env
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+include_trailing_comma = true
+use_parentheses = true
+multi_line_output = 2
+force_grid_wrap = 0
+sections = ["FUTURE","STDLIB","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
+default_section = "THIRDPARTY"
+known_first_party = ["rest_server"]
+line_length = 79
+known_third_party = ["fastapi","pydantic","starlette"]
+force_to_top = true
+
+[tool.flake8]
+format = "flake8"
+show-source = true
+statistics = true
+doctests = true
+enable-extensions = "G"
+strictness = "long"
+docstring-style = "numpy"
+max-line-length = 79
+max-complexity = 25
+exclude = [".git","__pycache__",".venv",".eggs","*.egg"]
+ignore = ["D100", "D104", "D106", "D401", "X100", "W504", "RST303", "RST304", "DAR103", "DAR203", "E501", "W503", "E203", "E722", "B001", "B008", "SIM106", "C901", "SIM102"]
+per-file-ignores = """
+  server/settings/*.py: WPS226, WPS407, WPS412, WPS432
+  server/*/migrations/*.py: WPS102, WPS114, WPS432
+  tests/*.py: S101, WPS432
+  app/*.py: B008
+"""
+
+[tool.pylint.MESSAGE_CONTROL]
