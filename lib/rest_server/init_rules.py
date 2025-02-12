@@ -21,5 +21,5 @@ def init_rules() -> None:
         rules = yaml.safe_load(file)
 
     # Store rules in Redis
-    redis = Redis(namespace="config")
-    redis.set_key("rules", json.dumps(rules))
+    redis = Redis(namespace="rest_server")
+    redis.set_key("rules_config", json.dumps(rules))

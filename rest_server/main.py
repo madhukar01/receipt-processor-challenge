@@ -10,6 +10,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from lib.core.logger import initialize_logger
 from lib.core.redis_connector import Redis
+from lib.rest_server.init_rules import init_rules
 from lib.rest_server.middlewares import create_context
 from rest_server.import_routes import import_routes
 
@@ -37,6 +38,14 @@ async def lifespan(app: CustomFastAPI) -> AsyncGenerator[None, None]:
     initialize_logger("rest_server")
     app.logger = structlog.get_logger("rest_server")
     await app.logger.info("Server starting up")
+
+    # Initialize rules
+    try:
+        init_rules()
+        await app.logger.info("Rules initialized successfully")
+    except Exception as exc:
+        await app.logger.error("Failed to initialize rules", exc_info=exc)
+        raise
 
     # Import routers
     import_routes(app)
