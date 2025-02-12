@@ -22,6 +22,7 @@ pylint = "^3.3.2"
 pre-commit = "^4.0.1"
 black = "^24.10.0"
 types-redis = "^4.6.0.20241004"
+types-pyyaml = "^6.0.12.20241230"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -1,0 +1,67 @@
+rules:
+  - name: "retailer_alphanumeric"
+    input_check:
+      type: "character_count"
+      target_field: "retailer"
+      condition: "alphanumeric"
+    points_calculation:
+      points_per_char: 1
+
+  - name: "round_dollar"
+    input_check:
+      type: "cents_check"
+      target_field: "total"
+      condition: "matches"
+      input_value: 1.00  # Check if cent value is 00
+    points_calculation:
+      extra_points: 50
+
+  - name: "multiple_quarter"
+    input_check:
+      type: "total_check"
+      target_field: "total"
+      condition: "divisible"
+      input_value: 0.25  # Check if target field is divisible by 0.25
+    points_calculation:
+      extra_points: 25
+
+  - name: "items_pair"
+    input_check:
+      type: "items_count"
+      target_field: "items"
+      condition: "group_size"
+      input_value: 2 # count items in groups of 2
+    points_calculation:
+      points_per_group: 5
+
+  - name: "description_length"
+    input_check:
+      type: "item_description"
+      target_field: "shortDescription"
+      condition: "divisible"
+      input_value: 3 # length divisible by 3
+    points_calculation:
+      price_multiplier: 0.2
+      rounding:
+        method: "up"
+        precision: 1.00 # cent value for rounding
+
+  - name: "odd_day"
+    input_check:
+      type: "date_check"
+      target_field: "purchaseDate"
+      condition: "parity"
+      parity: "odd"  # check if date is odd or even
+    points_calculation:
+      extra_points: 6
+
+  - name: "afternoon_bonus"
+    input_check:
+      type: "time_check"
+      target_field: "purchaseTime"
+      condition: "between"
+      input_range:
+        start: "14:00"
+        end: "16:00"
+    points_calculation:
+      extra_points: 10
