@@ -2,8 +2,7 @@
 from fastapi import FastAPI
 
 from rest_server.api.config import router as config_router
-
-# from rest_server.api.receipts import router as receipts_router
+from rest_server.api.receipts import router as receipts_router
 
 
 def import_routes(app: FastAPI) -> None:
@@ -12,5 +11,5 @@ def import_routes(app: FastAPI) -> None:
     Args:
         app: FastAPI application
     """
-    # app.include_router(receipts_router)
+    app.include_router(receipts_router)
     app.include_router(config_router)
